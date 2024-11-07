@@ -6,6 +6,16 @@ $(call inherit-product, device/qcom/common/base.mk)
 $(call inherit-product-if-exists, $(QCPATH)/common/config/device-vendor.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 
+# Include hals
+include device/qcom/common/hals.mk
+
+TARGET_DYNAMIC_64_32_MEDIASERVER := true
+
+# Enable Media Extensions for HAL1 on Legacy Devices
+ifeq ($(call is-board-platform-in-list, msm8937 msm8953 msm8996 msm8998 sdm660),true)
+  TARGET_USES_MEDIA_EXTENSIONS := true
+endif
+
 PRODUCT_BRAND := qcom
 PRODUCT_AAPT_CONFIG += hdpi mdpi
 
@@ -39,13 +49,6 @@ PRODUCT_COPY_FILES += \
 # Ipsec_tunnels feature
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.ipsec_tunnels.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.ipsec_tunnels.xml
-
-ifneq ($(TARGET_BOARD_AUTO),true)
-#copy telephony app's permissions
-PRODUCT_COPY_FILES += $(QCPATH)/commonsys/telephony-build/build/telephony_product_privapp-permissions-qti.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/telephony_product_privapp-permissions-qti.xml
-
-PRODUCT_COPY_FILES += $(QCPATH)/commonsys/telephony-build/build/telephony_system-ext_privapp-permissions-qti.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/telephony_system-ext_privapp-permissions-qti.xml
-endif
 
 # Permission for Wi-Fi passpoint support
 PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml

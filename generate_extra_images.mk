@@ -122,12 +122,13 @@ endif
 # Generate device tree overlay image (dtbo.img)
 #----------------------------------------------------------------------
 ifneq ($(strip $(TARGET_NO_KERNEL)),true)
+ifeq ($(TARGET_PREBUILT_KERNEL),)
 ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DTBO)),true)
 
 MKDTIMG := $(HOST_OUT_EXECUTABLES)/mkdtimg$(HOST_EXECUTABLE_SUFFIX)
 
 # Most specific paths must come first in possible_dtbo_dirs
-possible_dtbo_dirs = $(KERNEL_OUT)/arch/$(TARGET_KERNEL_ARCH)/boot/dts $(KERNEL_OUT)/arch/arm/boot/dts
+possible_dtbo_dirs = $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/arch/arm64/boot/dts $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/arch/arm/boot/dts
 $(shell mkdir -p $(possible_dtbo_dirs))
 dtbo_dir = $(firstword $(wildcard $(possible_dtbo_dirs)))
 dtbo_objs = $(shell find $(dtbo_dir) -name \*.dtbo)
@@ -144,6 +145,7 @@ endef
 $(BOARD_PREBUILT_DTBOIMAGE): $(MKDTIMG) $(INSTALLED_KERNEL_TARGET)
 	$(build-dtboimage-target)
 
+endif
 endif
 endif
 
@@ -260,6 +262,7 @@ kernelclean:
 
 ifeq ($(TARGET_COMPILE_WITH_MSM_KERNEL),true)
 # Set correct dependency for kernel modules
+ifneq ($(KERNEL_MODULES_INSTALL),)
 ifneq ($(BOARD_GKI_KERNEL_MODULES),)
 $(BOARD_GKI_KERNEL_MODULES): $(INSTALLED_BOOTIMAGE_TARGET)
 endif
@@ -268,6 +271,7 @@ $(BOARD_VENDOR_KERNEL_MODULES): $(INSTALLED_BOOTIMAGE_TARGET)
 endif
 ifneq ($(BOARD_RECOVERY_KERNEL_MODULES),)
 $(BOARD_RECOVERY_KERNEL_MODULES): $(INSTALLED_BOOTIMAGE_TARGET)
+endif
 endif
 endif
 
@@ -293,4 +297,4 @@ $(BUILT_SYSTEMIMAGE): otavendormod
 endif
 
 #Print PRODUCT_PACKAGES & PRODUCT_PACKAGES_DEBUG to output log
-$(call dump-products)
+#$(call dump-products)

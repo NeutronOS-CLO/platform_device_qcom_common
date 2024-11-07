@@ -128,7 +128,7 @@ AUDIO_HARDWARE += audio.primary.msm7627a
 AUDIO_HARDWARE += audio.primary.msm7630_surf
 AUDIO_HARDWARE += audio.primary.msm7630_fusion
 #AUDIO_HARDWARE += audio.primary.default
-AUDIO_HARDWARE += audio.a2dp.default
+#AUDIO_HARDWARE += audio.a2dp.default
 AUDIO_HARDWARE += audio.usb.default
 AUDIO_HARDWARE += audio.r_submix.default
 AUDIO_HARDWARE += audio.primary.mpq8092
@@ -1018,7 +1018,7 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_c2_video.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_c2_video.xml \
     device/qcom/common/media/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles.xml \
 
-ifeq ($(TARGET_USES_QMAA),true)
+# ifeq ($(TARGET_USES_QMAA),true)
 ifneq ($(TARGET_USES_QMAA_OVERRIDE_VIDEO),true)
 PRODUCT_COPY_FILES += \
     device/qcom/common/media/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_vendor.xml
@@ -1072,13 +1072,13 @@ endif
 -include frameworks/base/data/videos/VideoPackage1.mk
 
 # dm-verity definitions
-ifneq ($(BOARD_AVB_ENABLE), true)
-   PRODUCT_SYSTEM_VERITY_PARTITION=/dev/block/bootdevice/by-name/system
-   ifeq ($(ENABLE_VENDOR_IMAGE), true)
-      PRODUCT_VENDOR_VERITY_PARTITION=/dev/block/bootdevice/by-name/vendor
-   endif
-   $(call inherit-product, build/target/product/verity.mk)
-endif
+#ifneq ($(BOARD_AVB_ENABLE), true)
+#   PRODUCT_SYSTEM_VERITY_PARTITION=/dev/block/bootdevice/by-name/system
+#   ifeq ($(ENABLE_VENDOR_IMAGE), true)
+#      PRODUCT_VENDOR_VERITY_PARTITION=/dev/block/bootdevice/by-name/vendor
+#   endif
+#   $(call inherit-product, build/target/product/verity.mk)
+#endif
 
 ifeq ($(TARGET_BUILD_VARIANT),user)
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES+= \
